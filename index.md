@@ -1,12 +1,12 @@
 ---
 layout: layout.njk
-title: "Portfolio"
+title: "Il mio Blog"
 ---
 
-{% for post in collections.posts | reverse %}
+{% for post in collections.posts %}
   <article>
     <h2>{{ post.data.title }}</h2>
-    <img src="{{ post.data.image }}" alt="{{ post.data.title }}">
+    <img src="{{ post.data.image }}">
     <div class="caption">
       {{ post.content | safe }}
     </div>
