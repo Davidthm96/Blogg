@@ -1,13 +1,16 @@
 ---
 layout: layout.njk
-title: "Il mio primo post"
-image: "/img/tua-foto.jpg"
-tags: posts
+title: "Home"
+templateEngineOverride: njk, md
+eleventyExcludeFromCollections: true
 ---
-{% for post in collections.posts %}
+
+{% for post in collections.posts | reverse %}
   <article>
     <h2>{{ post.data.title }}</h2>
-    <img src="{{ post.data.image }}">
-    <div>{{ post.content }}</div>
+    <img src="{{ post.data.image }}" alt="{{ post.data.title }}">
+    <div class="caption">
+      {{ post.content | safe }}
+    </div>
   </article>
 {% endfor %}
