@@ -1,7 +1,8 @@
 ---
 layout: layout.njk
-title: "Titolo del Post"
+title: "Titolo del mio scatto"
 image: "/img/tua-foto.jpg"
+tags: posts
 ---
 
 ## {{ title }}
