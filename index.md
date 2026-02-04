@@ -1,6 +1,7 @@
 ---
 layout: layout.njk
 title: "Home"
+templateEngineOverride: njk, md
 ---
 
 {% for post in collections.posts %}
