@@ -1,14 +1,12 @@
 ---
 layout: layout.njk
-title: "Il mio Blog"
+title: "Home"
 ---
 
 {% for post in collections.posts %}
   <article>
     <h2>{{ post.data.title }}</h2>
     <img src="{{ post.data.image }}">
-    <div class="caption">
-      {{ post.content | safe }}
-    </div>
+    <div>{{ post.content }}</div>
   </article>
 {% endfor %}
