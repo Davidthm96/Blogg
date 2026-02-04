@@ -1,9 +1,9 @@
 ---
 layout: layout.njk
-title: "Home"
-templateEngineOverride: njk, md
+title: "Il mio primo post"
+image: "/img/tua-foto.jpg"
+tags: posts
 ---
-
 {% for post in collections.posts %}
   <article>
     <h2>{{ post.data.title }}</h2>
