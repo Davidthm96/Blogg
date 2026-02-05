@@ -62,5 +62,35 @@ iframe[src*="spotify"] {
     <main>
         {{ content | safe }}
     </main>
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+  function onYouTubeIframeAPIReady() {
+    document.querySelectorAll('.custom-player').forEach(playerContainer => {
+      const videoId = playerContainer.dataset.video;
+      const playBtn = playerContainer.querySelector('.play-btn');
+      const progressBar = playerContainer.querySelector('.progress');
+      
+      let player = new YT.Player(playerContainer.querySelector('.yt-hidden'), {
+        height: '0', width: '0', videoId: videoId,
+        playerVars: { 'controls': 0, 'showinfo': 0, 'rel': 0 },
+        events: {
+          'onStateChange': (event) => {
+            if (event.data == YT.PlayerState.PLAYING) {
+              setInterval(() => {
+                let pct = (player.getCurrentTime() / player.getDuration()) * 100;
+                progressBar.style.width = pct + '%';
+              }, 1000);
+            }
+          }
+        }
+      });
+
+      playBtn.addEventListener('click', () => {
+        if (player.getPlayerState() == 1) { player.pauseVideo(); playBtn.innerText = '▶'; }
+        else { player.playVideo(); playBtn.innerText = 'II'; }
+      });
+    });
+  }
+</script>
 </body>
 </html>
