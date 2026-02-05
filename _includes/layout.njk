@@ -48,6 +48,14 @@
     font-size: 1.2rem;
     cursor: pointer;
 }
+.spotify-wrapper {
+    background-color: #000;
+    line-height: 0; /* Rimuove spazi bianchi sotto l'iframe */
+}
+/* Questo filtro rende il player leggermente più desaturato per integrarsi meglio */
+iframe[src*="spotify"] {
+    filter: grayscale(0.2) contrast(1.1);
+}
     </style>
 </head>
 <body>
