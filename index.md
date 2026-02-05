@@ -29,6 +29,19 @@ eleventyExcludeFromCollections: true
       </div>
     {% endif %}
 
+{# SE È UN POST DA YOUTUBE (MUSICA) #}
+    {% if post.data.type == "youtube" %}
+      <div class="youtube-audio-wrapper" style="border: 1px solid #333; overflow: hidden; height: 120px; position: relative; margin: 20px 0;">
+        <iframe 
+          src="https://www.youtube.com/embed/{{ post.data.video_id }}?rel=0&showinfo=0&controls=1&color=white" 
+          style="position: absolute; top: -50px; left: 0; width: 100%; height: 220px;" 
+          frameborder="0" 
+          allow="autoplay; encrypted-media" 
+          allowfullscreen>
+        </iframe>
+      </div>
+    {% endif %}
+    
     <div class="caption">
       {{ post.content | safe }}
     </div>
