@@ -5,89 +5,150 @@
     <title>{{ title or metadata.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* Reset e Base */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: #000; color: #b0b0b0; font-family: "Times New Roman", serif; line-height: 1.1; text-align: left; }
+        body { 
+            background-color: #000; 
+            color: #b0b0b0; 
+            font-family: "Times New Roman", serif; 
+            line-height: 1.1; 
+            text-align: left; 
+        }
         
-        @media (min-width: 769px) { body { padding: 25px; max-width: 650px; } h2 { font-size: 2.2rem; } }
-        @media (max-width: 768px) { body { padding: 10px; width: 100%; } h2 { font-size: 28px; } }
+        /* Layout responsivo */
+        @media (min-width: 769px) { 
+            body { padding: 40px 25px; max-width: 650px; } 
+        }
+        @media (max-width: 768px) { 
+            body { padding: 20px 15px; width: 100%; } 
+        }
 
-        article { margin-bottom: 70px; }
-        h2 { color: #fff; font-weight: normal; margin-bottom: 12px; line-height: 0.95; }
-        img { width: 100%; height: auto; display: block; margin-bottom: 10px; pointer-events: none; }
+        article { margin-bottom: 80px; }
         
-        .caption { font-size: 1.1rem; margin-bottom: 5px; }
+        /* Immagini */
+        img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+            margin-bottom: 15px; 
+            pointer-events: none; 
+        }
+
+        /* Metadati (Titolo e Descrizione corpo 14) */
+        .post-metadata { 
+            font-size: 14px; 
+            line-height: 1.3; 
+        }
+        .post-title { 
+            color: #fff; 
+            text-transform: uppercase; 
+            margin-bottom: 4px; 
+            font-weight: normal;
+        }
+        .post-description { 
+            color: #888; 
+        }
+        
         a { color: inherit; text-decoration: underline; }
 
-        .music-player {
-    border: 1px solid #333;
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    gap: 15px;
-    margin-bottom: 15px;
-}
-.music-cover {
-    width: 60px !important;
-    height: 60px !important;
-    margin-bottom: 0 !important;
-}
-.music-info {
-    flex-grow: 1;
-}
-.music-title {
-    color: #fff;
-    display: block;
-    font-size: 1rem;
-}
-.music-artist {
-    font-size: 0.8rem;
-    color: #888;
-}
-.music-controls {
-    font-family: monospace;
-    font-size: 1.2rem;
-    cursor: pointer;
-}
-.spotify-wrapper {
-    background-color: #000;
-    line-height: 0; /* Rimuove spazi bianchi sotto l'iframe */
-}
-/* Questo filtro rende il player leggermente più desaturato per integrarsi meglio */
-iframe[src*="spotify"] {
-    filter: grayscale(0.2) contrast(1.1);
-}
+        /* Player YouTube Custom Minimal */
+        .custom-player {
+            border: 1px solid #333;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 15px;
+            background: #050505;
+        }
+        .play-btn { 
+            background: none; 
+            border: none; 
+            color: #fff; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            font-family: serif;
+            min-width: 20px;
+        }
+        .track-info { flex-grow: 1; }
+        .progress-container { 
+            width: 100%; 
+            height: 1px; 
+            background: #222; 
+            position: relative; 
+        }
+        .progress { 
+            width: 0%; 
+            height: 100%; 
+            background: #fff; 
+            transition: width 0.3s linear; 
+        }
+        .yt-hidden { display: none; }
+
+        /* Spotify Embed */
+        .spotify-wrapper {
+            background-color: #000;
+            line-height: 0;
+            margin-bottom: 15px;
+        }
+        iframe[src*="spotify"] {
+            filter: grayscale(0.2) contrast(1.1);
+        }
     </style>
 </head>
 <body>
     <main>
         {{ content | safe }}
     </main>
+
 <script src="https://www.youtube.com/iframe_api"></script>
 <script>
+  // Array per gestire più player nella stessa pagina
+  let players = [];
+
   function onYouTubeIframeAPIReady() {
-    document.querySelectorAll('.custom-player').forEach(playerContainer => {
+    document.querySelectorAll('.custom-player').forEach((playerContainer, index) => {
       const videoId = playerContainer.dataset.video;
       const playBtn = playerContainer.querySelector('.play-btn');
       const progressBar = playerContainer.querySelector('.progress');
       
-      let player = new YT.Player(playerContainer.querySelector('.yt-hidden'), {
-        height: '0', width: '0', videoId: videoId,
-        playerVars: { 'controls': 0, 'showinfo': 0, 'rel': 0 },
+      // Creiamo un contenitore unico per l'API di YouTube
+      const ytPlaceholder = playerContainer.querySelector('.yt-hidden');
+      ytPlaceholder.id = 'yt-player-' + index;
+      
+      players[index] = new YT.Player(ytPlaceholder.id, {
+        height: '0',
+        width: '0',
+        videoId: videoId,
+        playerVars: { 'controls': 0, 'showinfo': 0, 'rel': 0, 'modestbranding': 1 },
         events: {
           'onStateChange': (event) => {
             if (event.data == YT.PlayerState.PLAYING) {
-              setInterval(() => {
-                let pct = (player.getCurrentTime() / player.getDuration()) * 100;
+              const updateProgress = setInterval(() => {
+                if (players[index].getPlayerState() !== YT.PlayerState.PLAYING) {
+                  clearInterval(updateProgress);
+                }
+                let pct = (players[index].getCurrentTime() / players[index].getDuration()) * 100;
                 progressBar.style.width = pct + '%';
-              }, 1000);
+              }, 500);
             }
           }
         }
       });
 
       playBtn.addEventListener('click', () => {
-        if (player.getPlayerState() == 1) { player.pauseVideo(); playBtn.innerText = '▶'; }
-        else { player.playVideo(); playBtn.innerText = 'II'; }
+        let state = players[index].getPlayerState();
+        if (state == YT.PlayerState.PLAYING) {
+          players[index].pauseVideo();
+          playBtn.innerText = '▶';
+        } else {
+          // Opzionale: ferma gli altri player se ne parte uno nuovo
+          players.forEach((p, i) => { if(i !== index && p.pauseVideo) p.pauseVideo(); });
+          document.querySelectorAll('.play-btn').forEach(btn => btn.innerText = '▶');
+          
+          players[index].playVideo();
+          playBtn.innerText = 'II';
+        }
       });
     });
   }
