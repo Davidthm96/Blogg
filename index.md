@@ -29,12 +29,12 @@ eleventyExcludeFromCollections: true
       </div>
     {% endif %}
 
-{# SE È UN POST DA YOUTUBE (MUSICA) #}
+{# PLAYER YOUTUBE SOLO AUDIO #}
     {% if post.data.type == "youtube" %}
-      <div class="youtube-audio-wrapper" style="border: 1px solid #333; overflow: hidden; height: 120px; position: relative; margin: 20px 0;">
+      <div class="yt-audio-container" style="border: 1px solid #333; height: 45px; overflow: hidden; position: relative; margin: 20px 0; background: #000;">
         <iframe 
-          src="https://www.youtube.com/embed/{{ post.data.video_id }}?rel=0&showinfo=0&controls=1&color=white" 
-          style="position: absolute; top: -50px; left: 0; width: 100%; height: 220px;" 
+          src="https://www.youtube.com/embed/{{ post.data.video_id }}?controls=1&showinfo=0&rel=0&modestbranding=1&color=white" 
+          style="position: absolute; top: -312px; left: -2px; width: calc(100% + 4px); height: 360px;" 
           frameborder="0" 
           allow="autoplay; encrypted-media" 
           allowfullscreen>
