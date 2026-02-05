@@ -14,16 +14,18 @@ eleventyExcludeFromCollections: true
       <img src="{{ post.data.image | url }}" alt="{{ post.data.title }}">
     {% endif %}
 
-    {# SE È UN POST MUSICALE #}
+{# SE È UN POST MUSICALE CON PLAYER REALE #}
     {% if post.data.type == "music" %}
-      <div class="music-player">
-          <img src="{{ post.data.cover | url }}" class="music-cover" style="width:60px; height:60px; float:left; margin-right:15px;">
-          <div class="music-info">
-              <span class="music-title" style="color:#fff; display:block;">{{ post.data.title }}</span>
-              <span class="music-artist" style="color:#888; font-size:0.9rem;">{{ post.data.artist }}</span>
-          </div>
-          <a href="{{ post.data.spotify_url }}" target="_blank" style="text-decoration:none; font-size:1.5rem;">▶</a>
-          <div style="clear:both;"></div>
+      <div class="spotify-wrapper" style="margin: 20px 0; border: 1px solid #333;">
+        <iframe 
+          src="https://open.spotify.com/embed/track/{{ post.data.track_id }}?utm_source=generator&theme=0" 
+          width="100%" 
+          height="152" 
+          frameBorder="0" 
+          allowfullscreen="" 
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+          loading="lazy">
+        </iframe>
       </div>
     {% endif %}
 
