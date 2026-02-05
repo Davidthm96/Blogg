@@ -1,12 +1,11 @@
 ---
 layout: layout.njk
-title: "Titolo Canzone"
-artist: "Nome Artista"
-cover: "img/cover-album.jpg"
-spotify_url: "https://open.spotify.com/track/4T7CBE7nkQsiUqHLDROTwJ?si=a5ab63ef818f4513"
+title: "Nome Canzone"
+track_id: "4T7CBE7nkQsiUqHLDROTwJ"
 tags: posts
 type: music
 ---
+Perché ho scelto questa traccia.
 
 <div class="music-player">
     <img src="{{ cover | url }}" class="music-cover">
