@@ -29,16 +29,18 @@ eleventyExcludeFromCollections: true
       </div>
     {% endif %}
 
-{# PLAYER YOUTUBE SOLO AUDIO #}
-    {% if post.data.type == "youtube" %}
-      <div class="yt-audio-container" style="border: 1px solid #333; height: 45px; overflow: hidden; position: relative; margin: 20px 0; background: #000;">
-        <iframe 
-          src="https://www.youtube.com/embed/{{ post.data.video_id }}?controls=1&showinfo=0&rel=0&modestbranding=1&color=white" 
-          style="position: absolute; top: -312px; left: -2px; width: calc(100% + 4px); height: 360px;" 
-          frameborder="0" 
-          allow="autoplay; encrypted-media" 
-          allowfullscreen>
-        </iframe>
+{% if post.data.type == "youtube" %}
+      <div class="custom-player" data-video="{{ post.data.video_id }}" style="border: 1px solid #333; padding: 15px; margin: 20px 0; display: flex; align-items: center; gap: 20px;">
+        <div class="yt-hidden" style="display:none;"></div>
+        
+        <button class="play-btn" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; font-family: serif;">▶</button>
+        
+        <div class="track-info" style="flex-grow:1;">
+            <div style="font-size: 0.9rem; color: #fff; margin-bottom: 5px;">{{ post.data.title }}</div>
+            <div class="progress-container" style="width: 100%; height: 2px; background: #222; position: relative;">
+                <div class="progress" style="width: 0%; height: 100%; background: #fff; transition: width 0.5s;"></div>
+            </div>
+        </div>
       </div>
     {% endif %}
     
